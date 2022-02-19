@@ -1,0 +1,31 @@
+#nav{
+    width: 100%;
+    background: blue;
+    height: 30px;
+}
+
+#map-container{
+    
+}
+
+#map{
+    
+}
+
+#container{
+    width: 90%;
+    height: auto;
+    margin: auto;
+}
+
+#text{
+    margin: 4rem 0;
+}
+
+#stats-container{
+    background-color: purple;
+}
+
+#footer{
+
+}
