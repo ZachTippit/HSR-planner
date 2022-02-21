@@ -1,15 +1,60 @@
 #nav{
+    position: absolute;
+    top: 0;
     width: 100%;
-    background: blue;
+    background: none;
     height: 30px;
+    z-index: 1;
 }
 
 #map-container{
-    
+    height: 50vh;
 }
 
 #map{
-    
+    height: 200px;
+}
+
+.marker{
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #CC5500;
+
+}
+
+#lcn-box-container{
+    color: #CC5500;
+    position: absolute;
+    top: 150px;
+    background-color: rgba(250,250,250,1);
+    right: 5%;
+    height: auto;
+    z-index: 1;
+    width: 30%;
+    border-radius: 7%;
+}
+
+#mob-lcn-box-container {
+    margin-top: 2rem;
+    border: 1px solid darkgray;
+    box-shadow: 1px 1px;
+    border-radius: 7%;
+}
+
+.loc-input{
+    display: block;
+    margin: 2rem auto;
+    height: 2rem;
+    width: 40%;
+    padding: 0.5rem;
+}
+
+#loc-form-submit{
+    display: block;
+    margin: 2rem auto;
+    width: 100px;
+    background-color: darkgreen;
+    height: 2rem;
 }
 
 #container{
@@ -23,9 +68,19 @@
 }
 
 #stats-container{
-    background-color: purple;
+    background-color: #3c0c3d;
+    color: white;
+}
+
+.stat-text{
+    padding: 2rem;
 }
 
 #footer{
+    width: 90%;
+    margin: 4rem auto;
+}
 
+#footer-grid{
+    
 }

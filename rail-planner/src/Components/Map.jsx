@@ -1,170 +1,118 @@
-import React from 'react'
-import { useState, useEffect } from 'react'
-import { GoogleMap, LoadScript } from '@react-google-maps/api';
+import React, {useState, useEffect, useCallback} from 'react'
+import { Paper, Typography } from '@mui/material'
+import LocationBox from './LocationBox'
+import mapStyles from './mapStyles'
+import { DirectionsRenderer, DirectionsService, GoogleMap, LoadScript, Marker, MarkerShapeCircle } from '@react-google-maps/api'
+import BounceLoader from 'react-spinners/BounceLoader'
+import {default as DestTrain} from '../img/train.png'
+import {default as Circle} from '../img/rec.png'
 
+// const options = {
+//     zoomControlOptions: {
+//       position: google.maps.ControlPosition.RIGHT_CENTER // 'right-center' ,
+//       // ...otherOptions
+//     }
+//   }
 
-const Map = () => {
-   const [center, setCenter] = useState({lat: 39.7392, lng: -104.9903})
-   const [zoom, setZoom] = useState(3)
-   const [options, setOptions] = useState([
-    {
-        "featureType": "all",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "color": "#202c3e"
-            }
-        ]
-    },
-    {
-        "featureType": "all",
-        "elementType": "labels.text.fill",
-        "stylers": [
-            {
-                "gamma": 0.01
-            },
-            {
-                "lightness": 20
-            },
-            {
-                "weight": "1.39"
-            },
-            {
-                "color": "#ffffff"
-            }
-        ]
-    },
-    {
-        "featureType": "all",
-        "elementType": "labels.text.stroke",
-        "stylers": [
-            {
-                "weight": "0.96"
-            },
-            {
-                "saturation": "9"
-            },
-            {
-                "visibility": "on"
-            },
-            {
-                "color": "#000000"
-            }
-        ]
-    },
-    {
-        "featureType": "all",
-        "elementType": "labels.icon",
-        "stylers": [
-            {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "landscape",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "lightness": 30
-            },
-            {
-                "saturation": "9"
-            },
-            {
-                "color": "#29446b"
-            }
-        ]
-    },
-    {
-        "featureType": "poi",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "saturation": 20
-            }
-        ]
-    },
-    {
-        "featureType": "poi.park",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "lightness": 20
-            },
-            {
-                "saturation": -20
-            }
-        ]
-    },
-    {
-        "featureType": "road",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "lightness": 10
-            },
-            {
-                "saturation": -30
-            }
-        ]
-    },
-    {
-        "featureType": "road",
-        "elementType": "geometry.fill",
-        "stylers": [
-            {
-                "color": "#193a55"
-            }
-        ]
-    },
-    {
-        "featureType": "road",
-        "elementType": "geometry.stroke",
-        "stylers": [
-            {
-                "saturation": 25
-            },
-            {
-                "lightness": 25
-            },
-            {
-                "weight": "0.01"
-            }
-        ]
-    },
-    {
-        "featureType": "water",
-        "elementType": "all",
-        "stylers": [
-            {
-                "lightness": -20
-            }
-        ]
-    }
-    ])
-
+const containerStyle = {
+    width: '100%',
+    height: '100%'
+  };
+const Map = ({isMobile, isDarkMode, origin, destination, checkOriginDest, directionsCallback, dirResponse, tripDuration}) => {
+    
+    const [center, setCenter] = useState(isMobile ? {lat: 36, lng: -95} : {lat: 38, lng: -78})
+    const [zoom, setZooom] = useState(isMobile ? 3 : 4)
+    const [responded, setResponded] = useState(false)
     useEffect(() => {
-        console.log(process.env)
+        console.log(isMobile)
     }, [])
-
-
-  return (
-    <div id='map-container' style={{ height: '50vh', width: '100%' }}>
-        <LoadScript
-            googleMapsApiKey={process.env.REACT_APP_MAPS_KEY}
-        >
-            <GoogleMap
-                mapContainerStyle={options}
-                center={center}
-                zoom={zoom}
-            >
-        { /* Child components, such as markers, info windows, etc. */ }
-        <></>
-            </GoogleMap>
-        </LoadScript>
-    </div>
-  )
+    
+    //   const renderMap = () => {
+    //     // wrapping to a function is useful in case you want to access `window.google`
+    //     // to eg. setup options or create latLng object, it won't be available otherwise
+    //     // feel free to render directly if you don't need that
+    //     // const onLoad = useCallback(
+    //     //   function onLoad (mapInstance) {
+    //     //     // do something with map Instance
+    //     //   }
+    //     // )
+    //     return <GoogleMap
+    //       options={options}
+    //     //   onLoad={onLoad}
+    //     >
+    //       {
+    //         // ...Your map components
+    //       }
+    //     </GoogleMap>
+    //   }
+    
+    //   if (loadError) {
+    //     return <div>Map cannot be loaded right now, sorry.</div>
+    //   }
+    
+      return(
+        <div id='map-container'>
+          { isNaN(center) ? 
+            <LoadScript googleMapsApiKey={`${process.env.REACT_APP_MAPS_KEY}`}>
+                <GoogleMap
+                    id='direction-example'
+                    mapContainerStyle={containerStyle}
+                    options={{styles: mapStyles}}
+                    center={center}
+                    zoom={zoom}
+                >
+                { /* Child components, such as markers, info windows, etc. */ }
+                <Marker
+                    opacity={0.8}
+                    icon={DestTrain}
+                    position={{lat: 45, lng: -100}}/>
+                <Marker
+                    opacity={0.8}
+                    icon={Circle}
+                    position={{lat: 39.3, lng: -105}}/>
+                {(destination !== '' && origin !== '' && !responded) && 
+                    <DirectionsService
+                        options={{
+                            destination: destination,
+                            origin: origin,
+                            travelMode: 'DRIVING'
+                        }}
+                        callback={res => {
+                            directionsCallback(res)
+                            setResponded(true)}
+                        }
+                    />
+                }
+                {dirResponse !== '' && <DirectionsRenderer options={{directions: dirResponse}} />}
+              </GoogleMap>
+            </LoadScript>
+        : 
+            <BounceLoader color={'#46175A'} speedMultiplier={0.6} size={100} loading={''} />}
+            { !isMobile && <LocationBox checkOriginDest={checkOriginDest}/>}
+        </div>
+      ) 
+      
+    // return(
+    //     <div id='map-container'>
+    //        <GoogleMapReact
+    //         bootstrapURLKeys={{key: process.env.REACT_APP_MAPS_KEY}}
+    //         defaultCenter={center}
+    //         center={center}
+    //         defaultZoom={zoom}
+    //         margin={[50,50,50,50]}
+    //         options={{styles: mapStyles}}
+    //         onChange={''}
+    //         onChildClick={''}
+    //        >
+    //            <Marker 
+    //             lat={center.lat}
+    //             lng={center.lng}
+    //             text={'FWEEE'}
+    //             />
+    //        </GoogleMapReact>
+    //        
+    //     </div>
+    // )
 }
 
-export default Map
+export default Map;
