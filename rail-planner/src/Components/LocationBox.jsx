@@ -3,7 +3,7 @@ import {Autocomplete} from '@react-google-maps/api'
 
 const LocationBox = ({checkOriginDest}) => {
   return (
-    <div id='lcn-box-container'>
+    <div id='search'>
       <h3 style={{textAlign: 'center', fontWeight: 'bold'}}>High-Speed Rail Planner</h3>
       <form onSubmit={(e) => {e.preventDefault(); checkOriginDest(e.target[0].value, e.target[1].value);}} id='location-form'>
         <Autocomplete>

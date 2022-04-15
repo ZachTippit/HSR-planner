@@ -3,7 +3,7 @@ import { Grid } from '@mui/material'
 
 const Extras = ({checkOriginDest}) => {
   return (
-    <Grid container>
+    <Grid container id='act'>
         <Grid item xs={12} md={6}>
             <p>Support American HSR</p>
         </Grid>

@@ -162,7 +162,7 @@ useEffect(() => {
 }, [dist])
 
   return (
-    <div id='stats-container'>
+    <div id='stats'>
       <Grid container>
         <Grid item xs={12} md={6}>
         <h4>Statistics</h4>
