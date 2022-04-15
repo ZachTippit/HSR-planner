@@ -2,7 +2,7 @@ import React, {useState, useEffect, useCallback} from 'react'
 import { Paper, Typography } from '@mui/material'
 import LocationBox from './LocationBox'
 import mapStyles from './mapStyles'
-import { DirectionsRenderer, DirectionsService, GoogleMap, LoadScript, Marker, MarkerShapeCircle } from '@react-google-maps/api'
+import { Autocomplete, DirectionsRenderer, DirectionsService, GoogleMap, LoadScript, Marker, MarkerShapeCircle, StandaloneSearchBox } from '@react-google-maps/api'
 import BounceLoader from 'react-spinners/BounceLoader'
 import {default as DestTrain} from '../img/train.png'
 import {default as Circle} from '../img/rec.png'
@@ -53,14 +53,15 @@ const Map = ({isMobile, isDarkMode, origin, destination, checkOriginDest, direct
       return(
         <div id='map-container'>
           { isNaN(center) ? 
-            <LoadScript googleMapsApiKey={`${process.env.REACT_APP_MAPS_KEY}`}>
+            <LoadScript googleMapsApiKey={`${process.env.REACT_APP_MAPS_KEY}`} libraries={["places"]}>
                 <GoogleMap
                     id='direction-example'
                     mapContainerStyle={containerStyle}
-                    options={{styles: mapStyles}}
+                    options={{styles: mapStyles, disableDefaultUI: true}}
                     center={center}
                     zoom={zoom}
                 >
+                {dirResponse === false &&  <LocationBox checkOriginDest={checkOriginDest}/>}
                 { /* Child components, such as markers, info windows, etc. */ }
                 <Marker
                     opacity={0.8}
@@ -88,7 +89,7 @@ const Map = ({isMobile, isDarkMode, origin, destination, checkOriginDest, direct
             </LoadScript>
         : 
             <BounceLoader color={'#46175A'} speedMultiplier={0.6} size={100} loading={''} />}
-            { !isMobile && <LocationBox checkOriginDest={checkOriginDest}/>}
+            {/* { !isMobile && <LocationBox checkOriginDest={checkOriginDest}/>} */}
         </div>
       ) 
       

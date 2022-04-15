@@ -7,7 +7,7 @@ const App = () => {
   
   const [origin, setOrigin] = useState()
   const [destination, setDestination] = useState()
-  const [dirResponse, setDirResponse] = useState()
+  const [dirResponse, setDirResponse] = useState(false)
   const [tripDuration, setTripDuration] = useState(0)
   const [tripDistance, setTripDistance] = useState()
 
@@ -38,11 +38,13 @@ const App = () => {
     console.log(origin, destination)
   }, [origin, destination])
 
+  useEffect(() => console.log(tripDistance), [tripDistance])
+
   return (
    <div>
     <Nav />
     <Map isMobile={isMobile} isDarkMode={false} origin={origin} destination={destination} checkOriginDest={checkOriginDest} directionsCallback={directionsCallback} dirResponse={dirResponse} />
-    <Container isMobile={isMobile} isDarkMode={false} checkOriginDest={checkOriginDest} origin={origin} destination={destination} tripDuration={tripDuration}/>
+    <Container isMobile={isMobile} isDarkMode={false} checkOriginDest={checkOriginDest} origin={origin} destination={destination} tripDuration={tripDuration} tripDistance={tripDistance} dirResponse={dirResponse}/>
     <Footer />
    </div>
   );
